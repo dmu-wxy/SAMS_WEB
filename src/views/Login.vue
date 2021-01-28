@@ -6,11 +6,11 @@
 		<div class="center">
 			 <div class="description">
 				 <h1>表象在猫，根源在人</h1>
-				 <span>我们都是城市生态系统的一部分</span>
+				 <!-- <span>我们都是城市生态系统的一部分</span> -->
 			 </div>
 			 <div class="login">
 				<el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
-					<h3>系统登录</h3>
+					<h3>后台登录</h3>
 					<el-form-item prop="username">
 						<el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="手机号或邮箱"></el-input>
 					</el-form-item>
@@ -29,12 +29,14 @@
 </template>
 
 <script>
+	import {postKeyValueRequest} from '../utils/api.js';
+	
 	export default{
 		name:"Login",
 		data(){
 			return{
 				loginForm:{
-					username: 'meteor',
+					username: 'Meteor',
 					password: '123456'
 				},
 				checked: false,
@@ -48,9 +50,13 @@
 			submitLogin(){
 				this.$refs.loginForm.validate((valid) => {
 				          if (valid) {
-				            alert('submit!');
+				            postKeyValueRequest('/doLogin',this.loginForm).then(resp=>{
+								if(resp){
+									alert(JSON.stringify(resp));
+								}
+							})
 				          } else {
-				            console.log('error submit!!');
+				            this.$message.error("请输入账号或密码");
 				            return false;
 				          }
 				        });
