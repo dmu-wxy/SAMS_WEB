@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="header">
-			<img src="../../public/login/headerImg.png" style="height: 62px;" />
+			<span class="loginTitle"><b>SAMS后台</b></span>
 		</div>
 		<div class="center">
 			 <div class="description">
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-	import {postKeyValueRequest} from '../utils/api.js';
 	
 	export default{
 		name:"Login",
@@ -50,9 +49,10 @@
 			submitLogin(){
 				this.$refs.loginForm.validate((valid) => {
 				          if (valid) {
-				            postKeyValueRequest('/doLogin',this.loginForm).then(resp=>{
+				            this.postKeyValueRequest('/doLogin',this.loginForm).then(resp=>{
 								if(resp){
-									alert(JSON.stringify(resp));
+									window.sessionStorage.setItem('manager',JSON.stringify(resp.obj));
+									this.$router.replace('/home');
 								}
 							})
 				          } else {
@@ -68,9 +68,17 @@
 <style>
 	.header{
 		background: #eff4fa;
+		display: flex;
+		align-items: center;
 		width: 100%; 
 		height: 62px;
 		border-bottom: 1px solid #d6dfea
+	}
+	.header .loginTitle{
+		margin-left: 30px;
+		font-size: 30px;
+		font-family: 华文行楷;
+		color: royalblue;
 	}
 	.center{
 	    background:url("../../public/login/cat.jpg") no-repeat;
