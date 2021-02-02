@@ -12,10 +12,10 @@
 				<el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
 					<h3>后台登录</h3>
 					<el-form-item prop="username">
-						<el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="手机号或邮箱"></el-input>
+						<el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="用户名"></el-input>
 					</el-form-item>
 					<el-form-item prop="password">
-						<el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
+						<el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码" @keydown.enter.native="submitLogin"></el-input>
 					</el-form-item>
 					<el-checkbox v-model="checked"></el-checkbox>&nbsp;&nbsp;记住密码
 					<el-button type="primary" style="width: 100%;margin-top: 15px;" @click="submitLogin">登录</el-button>
@@ -35,7 +35,7 @@
 		data(){
 			return{
 				loginForm:{
-					username: 'Meteor',
+					username: 'admin',
 					password: '123456'
 				},
 				checked: false,

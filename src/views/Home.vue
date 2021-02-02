@@ -18,11 +18,10 @@
 		  </el-header>
 		  <el-container>
 		    <el-aside width="200px">
-				        <el-menu router
-							   >
-				          <el-submenu index="1" v-for="(item,index) in this.$router.options.routes" v-if="!item.hidden" :key="index">
+				        <el-menu router unique-opened>
+				          <el-submenu :index="index+''"  v-for="(item,index) in routes" v-if="!item.hidden" :key="index">
 				            <template slot="title">
-				              <i class="el-icon-location"></i>
+				              <i :class="item.iconCls" style="margin-right: 10px;"></i>
 				              <span>{{item.name}}</span>
 				            </template>
 				            <el-menu-item :index="child.path" v-for="(child,indexj) in item.children" :key="indexj">{{child.name}}</el-menu-item>
@@ -30,6 +29,13 @@
 				        </el-menu>
 			</el-aside>
 		    <el-main >
+				<el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path != '/home'">
+				  <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+				  <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
+				</el-breadcrumb>
+				<div class="homeWelcome" v-if="this.$router.currentRoute.path == '/home'">
+					欢迎使用流浪动物管理系统！
+				</div>
 				<router-view></router-view>
 			</el-main>
 		  </el-container>
@@ -45,6 +51,11 @@
 				manager:JSON.parse(window.sessionStorage.getItem('manager'))
 			}
 		},
+		computed:{
+			routes(){
+				return this.$store.state.routes;
+			}
+		},
 		methods:{
 			commandHandler(cmd){
 				if(cmd == 'logout'){
@@ -55,6 +66,7 @@
 					        }).then(() => {
 					          this.getRequest("/logout");
 							  window.sessionStorage.removeItem("manager");
+							  this.$store.commit('initRoutes',[]);
 							  this.$router.replace("/");
 					        }).catch(() => {
 					          this.$message({
@@ -94,5 +106,11 @@
 	.asideLast{
 		flex: 1;
 		background-color: F5F5F5;
+	}
+	.homeWelcome{
+		text-align: center;
+		font-family: 华文行楷;
+		font-size: 50px;
+		margin-top: 100px;
 	}
 </style>
