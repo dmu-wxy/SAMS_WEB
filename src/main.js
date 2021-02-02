@@ -29,9 +29,15 @@ router.beforeEach((to,from,next)=>{
 		//如果去login页，放行
 		next();
 	}else{
-		//否则初始化菜单
-		initMenu(router,store);
-		next();
+		//否则判断是否登录
+		if(window.sessionStorage.getItem("manager")){
+			//如果登录了，加载菜单
+			initMenu(router,store);
+			next();
+		}else{
+			//如果没登录，跳转到登录页面,登录后到之前输入的url
+			next('/?redirect=' + to.path);
+		}
 	}
 })
 
