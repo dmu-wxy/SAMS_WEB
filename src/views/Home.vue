@@ -36,7 +36,7 @@
 				<div class="homeWelcome" v-if="this.$router.currentRoute.path == '/home'">
 					欢迎使用流浪动物管理系统！
 				</div>
-				<router-view></router-view>
+				<router-view class="homeRouteView"></router-view>
 			</el-main>
 		  </el-container>
 		</el-container>
@@ -112,5 +112,8 @@
 		font-family: 华文行楷;
 		font-size: 50px;
 		margin-top: 100px;
+	}
+	.homeRouteView{
+		margin-top: 10px;
 	}
 </style>

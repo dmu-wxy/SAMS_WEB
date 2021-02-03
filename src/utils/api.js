@@ -76,6 +76,6 @@ export const deleteRequest=(url,params)=>{
 	return axios({
 		method:'delete',
 		url:`${base}${url}`,
-		data:params
+		params:params
 	})
 }
