@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-tabs type="card">
-          <el-tab-pane label="角色管理"><RoleMana></RoleMana></el-tab-pane>
+          <el-tab-pane label="角色管理(废弃)"><RoleMana></RoleMana></el-tab-pane>
           <el-tab-pane label="权限组"><PermissMana></PermissMana></el-tab-pane>
         </el-tabs>
     </div>
