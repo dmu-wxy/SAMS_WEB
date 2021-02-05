@@ -3,6 +3,7 @@
         <el-tabs type="card">
           <el-tab-pane label="角色管理(废弃)"><RoleMana></RoleMana></el-tab-pane>
           <el-tab-pane label="权限组"><PermissMana></PermissMana></el-tab-pane>
+		  <el-tab-pane label="学校管理"><PermissMana></PermissMana></el-tab-pane>
         </el-tabs>
     </div>
 </template>
