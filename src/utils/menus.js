@@ -40,8 +40,8 @@ export const formatRoutes = (routes) =>{
 					require(['../views/animal/'+component+'.vue'],resolve);
 				}else if(component.startsWith("Mon")){
 					require(['../views/money/'+component+'.vue'],resolve);
-				}else if(component.startsWith("User")){
-					require(['../views/user/'+component+'.vue'],resolve);
+				}else if(component.startsWith("Mana")){
+					require(['../views/manager/'+component+'.vue'],resolve);
 				}else if(component.startsWith("Sys")){
 					require(['../views/sys/'+component+'.vue'],resolve);
 				}

@@ -9,7 +9,15 @@
 				 <!-- <span>我们都是城市生态系统的一部分</span> -->
 			 </div>
 			 <div class="login">
-				<el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
+				<el-form 
+					v-loading="loading"
+				    element-loading-text="正在登录..."
+				    element-loading-spinner="el-icon-loading"
+				    element-loading-background="rgba(0, 0, 0, 0.8)"
+					:rules="rules" 
+					ref="loginForm" 
+					:model="loginForm" 
+					class="loginContainer">
 					<h3>后台登录</h3>
 					<el-form-item prop="username">
 						<el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="用户名"></el-input>
@@ -38,6 +46,7 @@
 					username: 'admin',
 					password: '123456'
 				},
+				loading: false,
 				checked: false,
 				rules:{
 					username:[{required:true,message:'请输入用户名',trigger:'blur'}],
@@ -48,8 +57,10 @@
 		methods:{
 			submitLogin(){
 				this.$refs.loginForm.validate((valid) => {
+						  this.loading = true;
 				          if (valid) {
 				            this.postKeyValueRequest('/doLogin',this.loginForm).then(resp=>{
+								this.loading = false;
 								if(resp){
 									window.sessionStorage.setItem('manager',JSON.stringify(resp.obj));
 									let path = this.$route.query.redirect;
