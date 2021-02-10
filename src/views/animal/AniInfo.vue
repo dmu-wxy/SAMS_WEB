@@ -13,7 +13,7 @@
 				<el-button size="small" type="success">
 					<i class="fa fa-level-down" aria-hidden="true"></i>
 					导入数据</el-button>
-				<el-button size="small" type="success">
+				<el-button size="small" type="success" @click="exportData">
 					<i class="fa fa-level-up" aria-hidden="true"></i>					
 					导出数据</el-button>
 				<el-button size="small" type="primary" icon="el-icon-plus" @click="showAddAnimalView">添加动物</el-button>
@@ -171,6 +171,9 @@
 			this.initAnimal();
 		},
 		methods:{
+			exportData(){
+				window.open('/animal/info/export','_parent');
+			},
 			emptyAnimal(){
 				this.animal = {
 					aid:'',
