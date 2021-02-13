@@ -193,6 +193,7 @@
 				this.importDataBtnText = '导入数据';
 				this.importDataBtnIcon = 'el-icon-upload2';
 				this.importDataBtnDisabled = false;
+				this.initAnimal();
 			},
 			onError(err, file, fileList){
 				this.importDataBtnText = '导入数据';
