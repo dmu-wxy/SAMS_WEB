@@ -10,11 +10,18 @@
 				</el-button>
 			</div>
 			<div>
-				<el-button size="small" type="success">
-					<i class="fa fa-level-down" aria-hidden="true"></i>
-					导入数据</el-button>
-				<el-button size="small" type="success" @click="exportData">
-					<i class="fa fa-level-up" aria-hidden="true"></i>					
+				<el-upload
+					style="display: inline-flex;margin-right: 10px;"
+					:show-file-list="false"
+					:before-upload="beforeUpload"
+					:on-success="onSuccess"
+					:on-error="onError"
+					:disabled="importDataBtnDisabled"
+					action="/animal/info/import/">
+					<el-button :disabled="importDataBtnDisabled" size="small" type="success" :icon="importDataBtnIcon">
+						{{importDataBtnText}}</el-button>
+				</el-upload>
+				<el-button size="small" type="success" @click="exportData" icon="el-icon-download">
 					导出数据</el-button>
 				<el-button size="small" type="primary" icon="el-icon-plus" @click="showAddAnimalView">添加动物</el-button>
 			</div>
@@ -146,6 +153,9 @@
 				title:'',
 				animals: [],
 				loading: false,
+				importDataBtnText: '导入数据',
+				importDataBtnIcon: 'el-icon-upload2',
+				importDataBtnDisabled: false,
 				total:0,
 				page:1,
 				size:10,
@@ -173,6 +183,21 @@
 		methods:{
 			exportData(){
 				window.open('/animal/info/export','_parent');
+			},
+			beforeUpload(){
+				this.importDataBtnText = '正在导入';
+				this.importDataBtnIcon = 'el-icon-loading';
+				this.importDataBtnDisabled = true;
+			},
+			onSuccess(response, file, fileList){
+				this.importDataBtnText = '导入数据';
+				this.importDataBtnIcon = 'el-icon-upload2';
+				this.importDataBtnDisabled = false;
+			},
+			onError(err, file, fileList){
+				this.importDataBtnText = '导入数据';
+				this.importDataBtnIcon = 'el-icon-upload2';
+				this.importDataBtnDisabled = false;
 			},
 			emptyAnimal(){
 				this.animal = {
