@@ -1,30 +1,61 @@
 <template>
 	<div>
-		<div style="display: flex;justify-content: space-between;">
-			<div>
-				<el-input clearable @clear="initAnimal()" @keydown.enter.native="initAnimal()" v-model="keywords" style="width: 300px; margin-right: 10px;" placeholder="输入动物名字进行搜索" prefix-icon="el-icon-search" size="small"></el-input>
-				<el-button @click="initAnimal()" icon="el-icon-search" type="primary" size="small">搜索</el-button>
-				<el-button type="primary" size="small">
-					<i class="fa fa-angle-double-down" aria-hidden="true"></i>
-					<span style="margin-left: 10px;">高级搜索</span>
-				</el-button>
+		<div>
+			<div style="display: flex;justify-content: space-between;">
+				<div>
+					<el-input :disabled="advancedSearchDisabled" clearable @clear="initAnimal()" @keydown.enter.native="initAnimal()" v-model="keywords" style="width: 300px; margin-right: 10px;" placeholder="输入动物名字进行搜索" prefix-icon="el-icon-search" size="small"></el-input>
+					<el-button :disabled="advancedSearchDisabled" @click="initAnimal()" icon="el-icon-search" type="primary" size="small">搜索</el-button>
+					<el-button @click="advancedSearchDisabled = !advancedSearchDisabled" type="primary" size="small">
+						<i :class="advancedSearchDisabled ? 'fa fa-angle-double-up': 'fa fa-angle-double-down'" aria-hidden="true"></i>
+						<span style="margin-left: 10px;">高级搜索</span>
+					</el-button>
+				</div>
+				<div>
+					<el-upload
+						style="display: inline-flex;margin-right: 10px;"
+						:show-file-list="false"
+						:before-upload="beforeUpload"
+						:on-success="onSuccess"
+						:on-error="onError"
+						:disabled="importDataBtnDisabled"
+						action="/animal/info/import/">
+						<el-button :disabled="importDataBtnDisabled" size="small" type="success" :icon="importDataBtnIcon">
+							{{importDataBtnText}}</el-button>
+					</el-upload>
+					<el-button size="small" type="success" @click="exportData" icon="el-icon-download">
+						导出数据</el-button>
+					<el-button size="small" type="primary" icon="el-icon-plus" @click="showAddAnimalView">添加动物</el-button>
+				</div>
 			</div>
-			<div>
-				<el-upload
-					style="display: inline-flex;margin-right: 10px;"
-					:show-file-list="false"
-					:before-upload="beforeUpload"
-					:on-success="onSuccess"
-					:on-error="onError"
-					:disabled="importDataBtnDisabled"
-					action="/animal/info/import/">
-					<el-button :disabled="importDataBtnDisabled" size="small" type="success" :icon="importDataBtnIcon">
-						{{importDataBtnText}}</el-button>
-				</el-upload>
-				<el-button size="small" type="success" @click="exportData" icon="el-icon-download">
-					导出数据</el-button>
-				<el-button size="small" type="primary" icon="el-icon-plus" @click="showAddAnimalView">添加动物</el-button>
+			<transition name="slide-fade">
+			<div v-show="advancedSearchDisabled" style="border: 1px solid #409EFF; border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0;">
+				<el-row>
+					<el-col :span="10">
+						出生日期：
+						<el-date-picker
+							  size="small"
+						      v-model="advancedSearchValue.birthDate"
+							  value-format="yyyy-MM-dd"
+						      type="daterange"
+						      range-separator="至"
+						      start-placeholder="开始日期"
+						      end-placeholder="结束日期">
+						    </el-date-picker>
+					</el-col>
+					<el-col :span="7" style="margin-top: 5px;">
+						性别：
+						<el-radio-group v-model="advancedSearchValue.gender">
+						  <el-radio label="公">公</el-radio>
+						  <el-radio label="母">母</el-radio>
+						</el-radio-group>
+					</el-col>
+					<el-col style="text-align: right;" :span="6">
+						<el-button size="small" >取消</el-button>
+						<el-button @click="initAnimal('advanced')" size="small" icon="el-icon-search" type="primary">搜索</el-button>
+					</el-col>
+				</el-row>
 			</div>
+			</transition>
 		</div>
 		<div style="margin-top: 10px;">
 			<el-table
@@ -156,6 +187,7 @@
 				importDataBtnText: '导入数据',
 				importDataBtnIcon: 'el-icon-upload2',
 				importDataBtnDisabled: false,
+				advancedSearchDisabled: false,
 				total:0,
 				page:1,
 				size:10,
@@ -166,6 +198,10 @@
 					birth:'',
 					breed:'',
 					p_addr:''
+				},
+				advancedSearchValue:{
+					gender:null,
+					birthDate:null,
 				},
 				dialogVisible:false,
 				rules:{
@@ -247,15 +283,26 @@
 				this.page = currentPage;
 				this.initAnimal();
 			},
-			initAnimal(){
+			initAnimal(type){
 				this.loading = true;
-				this.getRequest("/animal/info/?page=" + this.page + "&size=" + this.size + "&keywords=" + this.keywords).then(resp=>{
+				let url = "/animal/info/?page=" + this.page + "&size=" + this.size;
+				if(this.advancedSearchDisabled){
+					if(this.advancedSearchValue.gender){
+						url += "&gender=" + this.advancedSearchValue.gender;
+					}
+					if(this.advancedSearchValue.birthDate){
+						url += "&birthDate=" + this.advancedSearchValue.birthDate;
+					}
+				}else{
+					url += "&aname=" + this.keywords;
+				}
+				this.getRequest(url).then(resp=>{
 					this.loading = false;
 					if(resp){
 						this.animals = resp.data;
 						this.total = resp.total;
 					}
-				})
+				});
 			},
 			doAddAnimal(){
 				if(this.animal.aid){
@@ -289,5 +336,17 @@
 </script>
 
 <style>
-	
+	/* 可以设置不同的进入和离开动画 */
+	/* 设置持续时间和动画函数 */
+	.slide-fade-enter-active {
+	  transition: all .3s ease;
+	}
+	.slide-fade-leave-active {
+	  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+	}
+	.slide-fade-enter, .slide-fade-leave-to
+	/* .slide-fade-leave-active for below version 2.1.8 */ {
+	  transform: translateX(10px);
+	  opacity: 0;
+	}
 </style>
