@@ -3,7 +3,48 @@
 		<div style="margin-top: 10px;display: flex;justify-content: center;">
 			<el-input @keydown.enter.native="doSearch()" v-model="keywords" placeholder="通过用户名搜索用户..." prefix-icon="el-icon-search" style="width: 300px;margin-right: 10px;" size="small"></el-input>
 			<el-button icon="el-icon-search" type="primary" @click="doSearch()" size="small">搜索</el-button>
+			<el-button icon="el-icon-plus" type="success" @click="dialogVisible = true" size="small">添加操作员</el-button>
 		</div>
+		
+		<el-dialog
+		  title="添加用户"
+		  :visible.sync="dialogVisible"
+		  width="50%"
+		  :before-close="handleClose">
+		  <el-steps :space="400" :active="account" finish-status="success">
+		    <el-step title="用户名"></el-step>
+		    <el-step title="手机号"></el-step>
+		    <el-step title="电子邮箱"></el-step>
+			<el-step title="出生日期"></el-step>
+			<el-step title="性别"></el-step>
+			<el-step title="角色"></el-step>
+		  </el-steps>
+		  <el-input :model="manager.mname" placeholder="请输入用户名"></el-input>
+		  <el-input :model="manager.mphone" placeholder="请输入手机号"></el-input>
+		  <el-input :model="manager.memail" placeholder="请输入电子邮箱"></el-input>
+		  <el-date-picker
+			v-model="manager.birth"
+			type="datetime"
+			placeholder="选择日期时间">
+		  </el-date-picker>
+		  <el-radio-group v-model="manager.gender">
+		    <el-radio :label="0">男</el-radio>
+		    <el-radio :label="1">女</el-radio>
+		  </el-radio-group>
+		  <el-select v-model="manager.role.nameZh" placeholder="请选择">
+		    <el-option
+		      v-for="item in roles"
+		      :key="item"
+		      :label="item"
+		      :value="item">
+		    </el-option>
+		  </el-select>
+		  <span slot="footer" class="dialog-footer">
+		    <el-button :disabled="account == 0" @click="account--">上一步</el-button>
+		    <el-button type="primary" @click="account < 5 ? account++ : account">{{account == 5 ? '添加' : '下一步'}}</el-button>
+		  </span>
+		</el-dialog>
+		
 		<div style="margin-top: 20px; display: flex;flex-wrap: wrap;justify-content: space-around;">
 			<el-card class="manager-card box-card" v-for="(manager,index) in managers" :key="index">
 			  <div slot="header" class="clearfix">
@@ -63,7 +104,11 @@
 				keywords:'',
 				managers:[],
 				allRoles:[],
-				selectRoles:[]
+				selectRoles:[],
+				manager:{},
+				dialogVisible:false,
+				account:0,
+				roles:['管理员','操作员']
 			}
 		},
 		mounted() {
@@ -154,6 +199,9 @@
 						this.initManagers();
 					}
 				})
+			},
+			doAddManager(){
+				this.display = true;
 			}
 		}
 	}
