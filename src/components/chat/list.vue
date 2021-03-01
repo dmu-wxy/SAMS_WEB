@@ -1,9 +1,9 @@
 <template>
   <div id="list">
   	<ul style="padding-left: 0px;">
-  		<li v-for="item in sessions" :class="{ active: item.id === currentSessionId }" v-on:click="changeCurrentSessionId(item.id)"><!--   :class="[item.id === currentSessionId ? 'active':'']" -->
-  			<img class="avatar" :src="item.user.img" :alt="item.user.name">
-  			<p class="name">{{item.user.name}}</p>
+  		<li v-for="item in managers" :class="{ active: item.id === currentSessionId }" v-on:click="changeCurrentSessionId(item.mid)"><!--   :class="[item.id === currentSessionId ? 'active':'']" -->
+  			<img class="avatar" :src="item.face" :alt="item.mname">
+  			<p class="name">{{item.mname}}</p>
   		</li>
   	</ul>
   </div>
@@ -20,7 +20,7 @@ export default {
     }
   },
   computed: mapState([
-  'sessions',
+  'managers',
   'currentSessionId'
 	]),
   methods:{

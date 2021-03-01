@@ -31,7 +31,7 @@
 		    <el-radio :label="0">男</el-radio>
 		    <el-radio :label="1">女</el-radio>
 		  </el-radio-group>
-		  <el-select v-model="manager.role.nameZh" placeholder="请选择">
+		  <el-select v-model="manager.role" placeholder="请选择">
 		    <el-option
 		      v-for="item in roles"
 		      :key="item"
@@ -202,6 +202,13 @@
 			},
 			doAddManager(){
 				this.display = true;
+			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+				  .then(_ => {
+					done();
+				  })
+				  .catch(_ => {});
 			}
 		}
 	}
