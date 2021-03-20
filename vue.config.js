@@ -12,6 +12,7 @@ proxyObj['/'] = {
     }
 }
 module.exports = {
+	publicPath:'/sams',
     devServer: {
         host: 'localhost',
         port: 8080,

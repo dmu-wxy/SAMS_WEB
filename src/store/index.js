@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {getRequest} from "../utils/api.js"
-import '../utils/sockjs'
+// import '../utils/sockjs'
 import '../utils/stomp'
+import SockJS from 'sockjs-client'
 // import SockJS from "../utils/sockjs"
 // import Stomp from "../utils/stomp"
 
@@ -56,8 +57,9 @@ const store = new Vuex.Store({
                     context.commit('addMessage', receiveMsg);
                 })
             }, error => {
-
+				console.log(">>>>>>>>>>>>>>>>>>" + context.state)
             })
+			console.log(">>>>>>>>>>>>>>>>>>" + context.state)
         },
 		initData (context) {
 			console.log("初始化数据");
