@@ -30,7 +30,7 @@ axios.interceptors.response.use(success => {
     }
     return;
 })
-let base = '/sams';
+let base = '';
 
 export const postKeyValueRequest = (url, params) => {
     return axios({

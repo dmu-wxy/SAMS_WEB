@@ -53,7 +53,8 @@
 			  </div>
 			  <div style="display: flex;justify-content: start;">
 				<div>
-					<img src="../../../public/other.jpeg" :alt="manager.mname" :title="manager.mname" class="userFace">
+					<!-- <img src="../../../public/other.jpeg" :alt="manager.mname" :title="manager.mname" class="userFace"> -->
+					<img :src="manager.face" :alt="manager.mname" :title="manager.mname" class="userFace">
 				</div>
 				<div style="font-size: 14px;margin-left: 20px;">
 					<div><b>用户名</b>：{{manager.mname}}</div>

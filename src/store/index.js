@@ -1,11 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {getRequest} from "../utils/api.js"
-// import '../utils/sockjs'
 import '../utils/stomp'
 import SockJS from 'sockjs-client'
-// import SockJS from "../utils/sockjs"
-// import Stomp from "../utils/stomp"
 
 Vue.use(Vuex)
 
@@ -16,7 +13,7 @@ const store = new Vuex.Store({
 		routes:[],
 		sessions:[],
 		managers:[],
-		currentSessionId: -1,
+		currentSession: null,
 		filterKey:'',
 		stomp: null
 	},
@@ -24,11 +21,11 @@ const store = new Vuex.Store({
 		initRoutes(state,data){
 			state.routes = data;
 		},
-		changeCurrentSessionId (state,id) {
-			state.currentSessionId = id;
+		changeCurrentSession (state,id) {
+			state.currentSession = id;
 		},
 		addMessage (state,msg) {
-			state.sessions[state.currentSessionId-1].messages.push({
+			state.sessions[state.currentSession-1].messages.push({
 				content:msg,
 				date: new Date(),
 				self:true

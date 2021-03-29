@@ -15,5 +15,7 @@ npm run serve
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 放到tomcat中
+
+1. vue.config.js 配置为 publicPath:'/sams',
+2. api.js 配置 base 为 '/sams',

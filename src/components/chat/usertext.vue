@@ -23,7 +23,7 @@ export default {
 			console.log("----------------------",this.$store.state);
 			this.$store.state.stomp.send('/ws/chat', {}, JSON.stringify(msgObj));
   			// this.$store.commit('addMessage',this.content);
-  			this.content='';
+  			// this.content='';
   		}
   	}
   }
