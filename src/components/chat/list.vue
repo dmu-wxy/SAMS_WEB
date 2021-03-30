@@ -1,8 +1,8 @@
 <template>
   <div id="list">
   	<ul style="padding-left: 0px;">
-  		<li v-for="item in managers" :class="{ active: currentSession?item.mname === currentSession.mname:false }" v-on:click="changeCurrentSessionId(item.mid)"><!--   :class="[item.id === currentSessionId ? 'active':'']" -->
-  			<img class="avatar" :src="item.face" :alt="item.mname">
+  		<li v-for="item in managers" :class="{ active: currentSession?item.mname === currentSession.mname:false }" v-on:click="changeCurrentSession(item)"><!--   :class="[item.id === currentSessionId ? 'active':'']" -->
+  			<el-badge :is-dot="isDot[manager.mname + '#' + item.mname]"><img class="avatar" :src="item.face" :alt="item.mname"></el-badge>
   			<p class="name">{{item.mname}}</p>
   		</li>
   	</ul>
@@ -16,16 +16,17 @@ export default {
   name: 'list',
   data () {
     return {
-      
+      manager:JSON.parse(window.sessionStorage.getItem("manager"))
     }
   },
   computed: mapState([
   'managers',
+  'isDot',
   'currentSession'
 	]),
   methods:{
-  	changeCurrentSession:function (id) {
-  		this.$store.commit('changeCurrentSession',id)
+  	changeCurrentSession (currentSession) {
+  		this.$store.commit('changeCurrentSession',currentSession)
   	}
   }
 }
@@ -34,7 +35,7 @@ export default {
 <style lang="scss" scoped>
 #list {
 	li {
-		padding: 0px 15px;
+		padding: 16px 15px;
 		border-bottom: 1px solid #292C33;
 		cursor: pointer;
 		list-style: none;
@@ -54,6 +55,8 @@ export default {
 	.name {
 		display: inline-block;
 		margin-left: 15px;
+		margin-top: 0px;
+		margin-bottom: 0px;
 	}
 }
 </style>
