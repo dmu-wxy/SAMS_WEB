@@ -25,6 +25,24 @@
 					<el-form-item prop="password">
 						<el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码" @keydown.enter.native="submitLogin"></el-input>
 					</el-form-item>
+					<el-row>
+						<el-col :span="15">
+							<div style="width: 200px;">
+								<el-form-item prop="verify_code">
+									<el-input type="text" v-model="loginForm.verify_code" auto-complete="off" placeholder="验证码" @keydown.enter.native="submitLogin"></el-input>
+								</el-form-item>
+							</div>
+						</el-col>
+						<el-col :span="9">
+							<div style="width: 120px;">
+								<el-image :src="verify_code_url">
+								  <div slot="placeholder" class="image-slot">
+									加载中<span class="dot">...</span>
+								  </div>
+								</el-image>
+							</div>
+						</el-col>
+					</el-row>
 					<el-checkbox v-model="checked"></el-checkbox>&nbsp;&nbsp;记住密码
 					<el-button type="primary" style="width: 100%;margin-top: 15px;" @click="submitLogin">登录</el-button>
 				</el-form>
@@ -44,14 +62,17 @@
 			return{
 				loginForm:{
 					username: 'admin',
-					password: '123456'
+					password: '123456',
+					verify_code: ''
 				},
 				loading: false,
 				checked: false,
 				rules:{
 					username:[{required:true,message:'请输入用户名',trigger:'blur'}],
-					password:[{required:true,message:'请输入密码',trigger:'blur'}]
-				}
+					password:[{required:true,message:'请输入密码',trigger:'blur'}],
+					verify_code:[{required:true,message:'请输入验证码',trigger:'blur'}]
+				},
+				verify_code_url: '/verifyCode',
 			}
 		},
 		methods:{
@@ -69,7 +90,8 @@
 								}
 							})
 				          } else {
-				            this.$message.error("请输入账号或密码");
+				            this.$message.error("请输入账号/密码/验证码");
+							this.loading = false;
 				            return false;
 				          }
 				        });
@@ -125,7 +147,7 @@
 	.loginContainer{
 		background-clip: padding-box;
 		width: 335px;
-		height: 300px;
+		height: 330px;
 		padding: 15px 35px 15px 35px;
 		background-color: #fff;
 		border: 1px solid #eaeaea;
